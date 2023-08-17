@@ -1,1 +1,1 @@
-# jaykemon
+# A simple CLI-based game to practice Python
