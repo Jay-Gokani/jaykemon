@@ -35,6 +35,8 @@ def game_title():
     print('==================================================')
 
 def turn():
+    game_title()
+
     print('')
     sleep(1)
     print('1 Fight')
@@ -48,7 +50,6 @@ def turn():
     print('==================================================')
     sleep(1)
 
-def turn_choice():
     while True:
         sleep(1)
         main_choice = input('Type a number to select an option: ')
@@ -74,7 +75,9 @@ def turn_choice():
             return False
         else:
             sleep(1)
-            print('Please select a choice between 1 and 4')
+            print('Please only select a choice between 1 and 4...')
+            sleep(3)
+            turn()
 
 def fight_choice():
     print('Out of the loop')
@@ -87,11 +90,9 @@ def pokemon_choice():
 
 def run_choice():
     sleep(1)
-    print('You can not run from a trainer battle! Select another choice.')
+    print('You can not run from a trainer battle! Select another choice...')
     sleep(3)
-    game_title()
     turn()
-    turn_choice()
 
 
 
@@ -99,9 +100,8 @@ def run_choice():
 
 ## GAME ##
 
-game_title()
-
 # Intro
+game_title()
 print('')
 print('William wants to battle...')
 sleep(2)
@@ -112,6 +112,5 @@ print('')
 print('==================================================')
 sleep(2)
 
-game_title()
+# Turn
 turn()
-turn_choice()
