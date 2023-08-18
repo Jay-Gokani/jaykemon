@@ -76,11 +76,6 @@ def turn_choice():
             sleep(1)
             print('Please select a choice between 1 and 4')
 
-def core():
-    game_title()
-    turn()
-    turn_choice()
-
 def fight_choice():
     print('Out of the loop')
 
@@ -94,7 +89,9 @@ def run_choice():
     sleep(1)
     print('You can not run from a trainer battle! Select another choice.')
     sleep(3)
-    core()
+    game_title()
+    turn()
+    turn_choice()
 
 
 
@@ -115,4 +112,6 @@ print('')
 print('==================================================')
 sleep(2)
 
-core()
+game_title()
+turn()
+turn_choice()
