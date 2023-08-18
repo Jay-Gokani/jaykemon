@@ -34,6 +34,72 @@ def game_title():
     print(figlet_format("Jaykemon"))
     print('==================================================')
 
+def turn():
+    print('')
+    sleep(1)
+    print('1 Fight')
+    sleep(1)
+    print('2 Item')
+    sleep(1)
+    print('3 Pokemon')
+    sleep(1)
+    print('4 Run')
+    print('')
+    print('==================================================')
+    sleep(1)
+
+def turn_choice():
+    while True:
+        sleep(1)
+        main_choice = input('Type a number to select an option: ')
+        if main_choice == '1':
+            sleep(1)
+            print('You chose: Fight')
+            fight_choice()
+            return False
+        elif main_choice == '2':
+            sleep(1)
+            print('You chose: Item')
+            item_choice()
+            return False
+        elif main_choice == '3':
+            sleep(1)
+            print('You chose: Pokemon')
+            pokemon_choice()
+            return False
+        elif main_choice == '4':
+            sleep(1)
+            print('You chose: Run')
+            run_choice()
+            return False
+        else:
+            sleep(1)
+            print('Please select a choice between 1 and 4')
+
+def core():
+    game_title()
+    turn()
+    turn_choice()
+
+def fight_choice():
+    print('Out of the loop')
+
+def item_choice():
+    print('Out of the loop')
+
+def pokemon_choice():
+    print('Out of the loop')
+
+def run_choice():
+    sleep(1)
+    print('You can not run from a trainer battle! Select another choice.')
+    sleep(3)
+    core()
+
+
+
+
+
 ## GAME ##
 
 game_title()
@@ -49,31 +115,4 @@ print('')
 print('==================================================')
 sleep(2)
 
-game_title()
-
-print('')
-sleep(1)
-print('1 Fight')
-sleep(1)
-print('2 Item')
-sleep(1)
-print('3 Pokemon')
-sleep(1)
-print('4 Run')
-print('')
-print('==================================================')
-sleep(2)
-
-main_choice = input('Type a number to select an option: ')
-if main_choice == '1':
-    print('You chose: Fight')
-    # move_choice()
-elif main_choice == '2':
-    print('You chose: Item')
-    # item_choice()
-elif main_choice == '3':
-    print('You chose: Pokemon')
-    # pokemon_choice()
-elif main_choice == '4':
-    print('You chose: Run')
-    # run_choice()
+core()
