@@ -3,18 +3,20 @@ from pyfiglet import figlet_format
 from time import sleep
 from random import randint
 
+damage_regulator = 3
+
 class Haunter():
     def __init__(self):
         self.name = "Haunter"
         self.type1 = "Ghost"
         self.type2 = "Poison"    
-        self.max_hp          = 40    
+        self.max_hp          = 85    
         self.hp              = 10
-        self.attack          = 15
-        self.defence         = 18
-        self.special_attack  = 30
-        self.special_defence = 28
-        self.speed           = 30
+        self.attack          = 38
+        self.defence         = 38
+        self.special_attack  = 55
+        self.special_defence = 50
+        self.speed           = 50
 
 # print(haunter.hp)
 # haunter.hp += 10
@@ -26,22 +28,25 @@ class Kadabra():
         self.name = "Kadabra"
         self.type1 = "Psychic"
 
-        self.max_hp          = 35    
-        self.hp              = 35
-        self.attack          = 12
-        self.defence         = 15
-        self.special_attack  = 35
-        self.special_defence = 30
-        self.speed           = 34 
+        self.max_hp          = 75    
+        self.hp              = 75
+        self.attack          = 35
+        self.defence         = 35
+        self.special_attack  = 60
+        self.special_defence = 54
+        self.speed           = 55
 
-def game_title():
+        self.sleep           = False
+        self.confused        = False
+
+def title_banner():
     os.system('clear')
     print('==================================================')
     print(figlet_format("Jaykemon"))
     print('==================================================')
 
 def turn():
-    game_title()
+    title_banner()
 
     print('')
     sleep(1)
@@ -94,10 +99,84 @@ def turn():
             turn()
 
 def fight_choice():
-    print('Update me!')
+    title_banner()
+    print('')
+    sleep(1)
+    print('1 Shadow Ball')
+    sleep(1)
+    print('2 Shadow Punch')
+    sleep(1)
+    print('3 Confuse Ray')
+    sleep(1)
+    print('4 Hypnosis')
+    sleep(1)
+    print('')
+    print('==================================================')
+    sleep(1)
+
+    # Todo: do I need return statements for hp, confusion and sleep status'?
+    while True:
+        move_selected = input('Type a number to select an option: ')
+        title_banner()
+        if move_selected == '1':
+            # Shadow Ball
+            sleep(2)
+            print('Haunter used Shadow Ball!')
+            sleep(1)
+            print('It\'s super effective!')
+            shadow_ball_base_damage = 80
+            shadow_ball_damage = haunter.special_attack - kadabra.special_defence + round((shadow_ball_base_damage/damage_regulator))
+            kadabra.hp -= shadow_ball_damage
+            sleep(1)
+            print(f'Haunter dealt {shadow_ball_base_damage} points of damage!')
+            print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
+            return False
+        if move_selected == '2':
+            # Shadow Punch
+            sleep(2)
+            print('Haunter used Shadow Punch!')
+            sleep(1)
+            print('It\'s super effective!')
+            shadow_punch_base_damage = 60
+            shadow_punch_damage = haunter.attack - kadabra.defence + round((shadow_punch_base_damage/damage_regulator))
+            kadabra.hp -= shadow_punch_damage
+            sleep(1)
+            print(f'Haunter dealt {shadow_punch_damage} points of damage!')
+            print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
+            return False
+        if move_selected == '3':
+            # Confuse Ray
+            sleep(2)
+            print('Haunter used Confuse Ray!')
+            sleep(1)
+            if kadabra.confused == True:
+                print('Kadabra is already confused...')
+            else:
+                print('Enemy Kadabra is confused!')
+            return False
+        if move_selected == '4':
+            # Hypnosis            
+            sleep(2)
+            print('Haunter used Hypnosis!')
+            sleep(1)
+            if kadabra.sleep == True:
+                print('Kadabra is already asleep...')
+            sleep_chance = randint(1, 3)
+            if sleep_chance != 1:
+                kadabra.sleep = True
+                print('Enemy Kadabra fell asleep!')
+            else:
+                print('Haunter\'s Hypnosis missed!')
+            return False
+        else:
+            sleep(1)
+            print('Please only select a choice between 1 and 4...')
+            sleep(4)
+            fight_choice()
+            return False    
 
 def item_choice():
-    game_title()
+    title_banner()
     sleep(1)
     print('')
     print('Items')
@@ -190,7 +269,7 @@ if switch == 'on':
     kadabra = Kadabra()
 
     # Intro
-    game_title()
+    title_banner()
     print('')
     print('William wants to battle...')
     sleep(2)
