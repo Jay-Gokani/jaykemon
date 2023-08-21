@@ -1,32 +1,38 @@
 import os
 from pyfiglet import figlet_format
 from time import sleep
+from random import randint
 
 class Haunter():
     def __init__(self):
         self.name = "Haunter"
         self.type1 = "Ghost"
-        self.type2 = "Poison"
-        
-        hp              = 20
-        attack          = 15
-        defence         = 18
-        special_attack  = 30
-        special_defence = 28
-        speed           = 30
+        self.type2 = "Poison"    
+        self.max_hp          = 40    
+        self.hp              = 10
+        self.attack          = 15
+        self.defence         = 18
+        self.special_attack  = 30
+        self.special_defence = 28
+        self.speed           = 30
+
+# print(haunter.hp)
+# haunter.hp += 10
+# print(haunter.hp)
+
 
 class Kadabra():
     def __init__(self):
         self.name = "Kadabra"
         self.type1 = "Psychic"
-        self.type2 = ""
 
-        hp              = 18
-        attack          = 12
-        defence         = 10
-        special_attack  = 35
-        special_defence = 30
-        speed           = 28 
+        self.max_hp          = 35    
+        self.hp              = 35
+        self.attack          = 12
+        self.defence         = 15
+        self.special_attack  = 35
+        self.special_defence = 30
+        self.speed           = 34 
 
 def game_title():
     os.system('clear')
@@ -56,26 +62,26 @@ def turn():
 
     while True:
         sleep(1)
-        main_choice = input('Type a number to select an option: ')
-        if main_choice == '1':
+        turn_choice = input('Type a number to select an option: ')
+        if turn_choice == '1':
             sleep(1)
             print('You chose: Fight')
             sleep(3)
             fight_choice()
             return False
-        elif main_choice == '2':
+        elif turn_choice == '2':
             sleep(1)
             print('You chose: Item')
             sleep(3)
             item_choice()
             return False
-        elif main_choice == '3':
+        elif turn_choice == '3':
             sleep(1)
             print('You chose: Pokemon')
             sleep(3)
             pokemon_choice()
             return False
-        elif main_choice == '4':
+        elif turn_choice == '4':
             sleep(1)
             print('You chose: Run')
             sleep(3)
@@ -107,24 +113,54 @@ def item_choice():
     print('==================================================')
     sleep(1)
 
+# Todo: end turn after potion or randopotion. Maybe through returning false then running a function to determine Kadabra's move?
     while True:
         item_selected = input('Type a number to select an option: ')
         if item_selected == '1':
-            print(2)
-            # Todo: make a Haunter instance
-            # Haunter HP + 20
-            # If HP > max: max
-            # Print 'Haunter's HP is now x'
+            # Potion
+            if potion_quantity != 0:
+                start_hp = haunter.hp
+                haunter.hp + 20
+                if haunter.hp > haunter.max_hp:
+                    haunter.hp = haunter.max_hp
+                if start_hp < 20:
+                    restored_hp = 20
+                else:
+                    restored_hp = haunter.max_hp - start_hp
+                sleep(1)
+                print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.max_hp}')
+                potion_quantity = 0
+                sleep(4)
+            else:
+                sleep(1)
+                print('You have ran out of potions. Please select another choice...')
+                sleep(4)
+                item_choice()
+                return False
         elif item_selected == '2':
-            print(2)
-            # Restore health by randint between 0 and (max health - current health)
+            # Randopotion
+            if randopotion_quantity != 0:
+                start_hp = haunter.hp
+                potion_power = randint(0, haunter.max_hp - haunter.hp)
+                sleep(1)
+                print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {start_hp + potion_power}')
+                randopotion_quantity = 0
+                sleep(5)
+            else:
+                sleep(1)
+                print('You have ran out of randopotions. Please select another choice...')
+                sleep(4)
+                item_choice()
+                return False
         elif item_selected == '3':
+            # Pokeball
             sleep(1)
             print('You can\'t catch another trainer\'s Pokemon! Select another item...')
             sleep(4)
             item_choice()
             return False
         else:
+            # Invalid choice number
             sleep(1)
             print('Please only select a choice between 1 and 3...')
             sleep(4)
@@ -149,18 +185,24 @@ def run_choice():
 
 
 ## GAME ##
+switch = 'on'
 
-# Intro
-game_title()
-print('')
-print('William wants to battle...')
-sleep(2)
-print('William sent out Kadabra!')
-sleep(2)
-print('Jay sent out Haunter!')
-print('')
-print('==================================================')
-sleep(2)
+if switch == 'on':
 
-# Turn
-turn()
+    haunter = Haunter()
+    Kadabra = Kadabra()
+
+    # Intro
+    game_title()
+    print('')
+    print('William wants to battle...')
+    sleep(2)
+    print('William sent out Kadabra!')
+    sleep(2)
+    print('Jay sent out Haunter!')
+    print('')
+    print('==================================================')
+    sleep(2)
+
+    # Turn
+    turn()
