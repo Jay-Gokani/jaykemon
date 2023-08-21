@@ -45,7 +45,7 @@ def turn():
 
     print('')
     sleep(1)
-    print('Haunter (HP 20/20) vs Kadabra (HP 18/18)')
+    print(f'Haunter (HP {haunter.hp}/{haunter.max_hp}) vs Kadabra (HP {kadabra.hp}/{kadabra.max_hp})')
     print('')
     sleep(1)
     print('1 Fight')
@@ -113,7 +113,6 @@ def item_choice():
     print('==================================================')
     sleep(1)
 
-# Todo: end turn after potion or randopotion. Maybe through returning false then running a function to determine Kadabra's move?
     while True:
         item_selected = input('Type a number to select an option: ')
         if item_selected == '1':
@@ -131,6 +130,7 @@ def item_choice():
                 print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.max_hp}')
                 potion_quantity = 0
                 sleep(4)
+                # Todo: turn success, opponent's turn
             else:
                 sleep(1)
                 print('You have ran out of potions. Please select another choice...')
@@ -145,7 +145,8 @@ def item_choice():
                 sleep(1)
                 print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {start_hp + potion_power}')
                 randopotion_quantity = 0
-                sleep(5)
+                sleep(4)
+                # Todo: turn success, opponent's turn
             else:
                 sleep(1)
                 print('You have ran out of randopotions. Please select another choice...')
@@ -180,17 +181,13 @@ def run_choice():
     sleep(3)
     turn()
 
-
-
-
-
 ## GAME ##
 switch = 'on'
 
 if switch == 'on':
 
     haunter = Haunter()
-    Kadabra = Kadabra()
+    kadabra = Kadabra()
 
     # Intro
     game_title()
