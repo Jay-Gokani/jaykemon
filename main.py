@@ -6,8 +6,7 @@ from sys import exit
 
 damage_regulator = 3
 money = randint(435, 1025)
-turn_count = 0
-
+confusion_turn_count = 0
 
 class Haunter():
     def __init__(self):
@@ -21,11 +20,6 @@ class Haunter():
         self.special_attack  = 55
         self.special_defence = 50
         self.speed           = 50
-
-# print(haunter.hp)
-# haunter.hp += 10
-# print(haunter.hp)
-
 
 class Kadabra():
     def __init__(self):
@@ -51,7 +45,6 @@ def title_banner():
 
 def turn():
     title_banner()
-
     print('')
     sleep(1)
     print(f'Haunter (HP {haunter.hp}/{haunter.max_hp}) vs Kadabra (HP {kadabra.hp}/{kadabra.max_hp})')
@@ -231,8 +224,8 @@ def item_choice():
                     restored_hp = haunter.max_hp - start_hp
                 sleep(1)
                 print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.max_hp}')
+                sleep(3)
                 potion_quantity = 0
-                sleep(4)
                 kadabra_turn()
                 False
             else:
@@ -248,8 +241,8 @@ def item_choice():
                 potion_power = randint(0, haunter.max_hp - haunter.hp)
                 sleep(1)
                 print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {start_hp + potion_power}')
+                sleep(3)
                 randopotion_quantity = 0
-                sleep(4)
                 kadabra_turn()
                 return False
             else:
@@ -272,7 +265,6 @@ def item_choice():
             sleep(4)
             item_choice()
             return False
-            
 
 def pokemon_choice():
     sleep(1)
@@ -286,21 +278,19 @@ def run_choice():
     sleep(3)
     turn()
 
-def turn_counter():
+def confusion_turn_counter():
     if kadabra.sleep == False:
         if kadabra.confused == True:
-            global turn_count
-            turn_count += 1
-            print(turn_count)
-            sleep(3)
+            global confusion_turn_count
+            confusion_turn_count += 1
         else:
-            turn_count = 0
+            confusion_turn_count = 0
 
 def kadabra_turn():
-    sleep(1)
     title_banner()
     print('')
-    sleep(3)
+    sleep(1)
+    print('Enemy Kadabra\'s turn...')
 
     if kadabra.sleep == True:
         sleep_chance = randint(1, 3)
@@ -313,7 +303,7 @@ def kadabra_turn():
             sleep(3)
             turn()
 
-    if turn_count == 2:
+    if confusion_turn_count == 2:
         kadabra.confused = False
         print('Kadabra snapped out of its confusion!')
         sleep(3)
@@ -384,5 +374,5 @@ if switch == 'on':
 
     while True:
     #     turn()
-        turn_counter()
+        confusion_turn_counter()
         kadabra_turn()
