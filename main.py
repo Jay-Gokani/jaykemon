@@ -286,11 +286,14 @@ def run_choice():
     sleep(3)
     turn()
 
+# Todo first: test this works when kadabra is confused then this func and kadabra's
 def turn_counter():
-    global turn_count
-    turn_count += 1
-    print(turn_count)
-    sleep(3)
+    if kadabra.sleep == False:
+        if kadabra.confused == True:
+            global turn_count
+            turn_count += 1
+            print(turn_count)
+            sleep(3)
 
 def kady_turn():
     tester = input('Count or difference?')
@@ -304,7 +307,7 @@ def kady_turn():
         print('Wrong choice - try again')
         tester()
 
-# Todo first:
+# Todo:
 # In kadabra's code, assign a variable to make a reference of the turn_count value when kadabra.confused = True
 # When that variable is equal to another variable which is + 2 of the former's value, confused = False
 # Same logic with Reflect 
@@ -317,9 +320,6 @@ def kadabra_turn():
     print('')
     sleep(3)
 
-    start_turn = 0
-    current_turn = start_turn + 1
-
     if kadabra.sleep == True:
         sleep_chance = randint(1, 3)
         if sleep_chance == 1:
@@ -331,8 +331,12 @@ def kadabra_turn():
             sleep(3)
             turn()
 
+    if turn_count == 2:
+        kadabra.confused = False
+        print('Kadabra snapped out of its confusion')
     if kadabra.confused == True:
-        confusion_chance = randint(1, 2)
+        # hit itself at a random chance or fight if not
+
 
     selection = randint(1, 4)
     if selection == 1:
@@ -379,6 +383,4 @@ if switch == 'on':
     while True:
     #     turn()
         turn_counter()
-    #    kadabra_turn()
-        kady_turn()
-    # kadabra_turn()
+        kadabra_turn()
