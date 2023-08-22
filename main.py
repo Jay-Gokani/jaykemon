@@ -41,7 +41,7 @@ class Kadabra():
         self.speed           = 55
 
         self.sleep           = False
-        self.confused        = False
+        self.confused        = True
 
 def title_banner():
     os.system('clear')
@@ -286,7 +286,6 @@ def run_choice():
     sleep(3)
     turn()
 
-# Todo first: test this works when kadabra is confused then this func and kadabra's
 def turn_counter():
     if kadabra.sleep == False:
         if kadabra.confused == True:
@@ -294,25 +293,8 @@ def turn_counter():
             turn_count += 1
             print(turn_count)
             sleep(3)
-
-def kady_turn():
-    tester = input('Count or difference?')
-    if tester == 'Count':    
-        print(f'Turn number {turn_count}')
-    elif tester == 'difference':
-        print('update')
-        # Assign a variable to reference the current turn_count value
-        # Another variable to 
-    else:
-        print('Wrong choice - try again')
-        tester()
-
-# Todo:
-# In kadabra's code, assign a variable to make a reference of the turn_count value when kadabra.confused = True
-# When that variable is equal to another variable which is + 2 of the former's value, confused = False
-# Same logic with Reflect 
-# kady_turn can be deleted as it was a test
-# Also delete from while statement at the end of the code
+        else:
+            turn_count = 0
 
 def kadabra_turn():
     sleep(1)
@@ -333,29 +315,49 @@ def kadabra_turn():
 
     if turn_count == 2:
         kadabra.confused = False
-        print('Kadabra snapped out of its confusion')
+        print('Kadabra snapped out of its confusion!')
+        sleep(3)
     if kadabra.confused == True:
-        # hit itself at a random chance or fight if not
+        print('Kadabra is confused...')
+        sleep(3)
+        recoil_chance = randint(1, 3)
+        if recoil_chance == 1:
+            print('Kadabra hurt itself in it\'s confusion!')
+            kadabra.hp -= round(kadabra.max_hp * (randint(20, 30)/100))
+            if kadabra.hp <= 0:
+                print(f'Kadabra fainted! You win ${money}!')
+                sleep(3)
+                exit()
+            else:
+                sleep(2)
+                print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
+                sleep(3)
+                turn()
+        else:
+            kadabra_move()
 
 
-    selection = randint(1, 4)
-    if selection == 1:
-        # Confusion
-        print('1')
 
-    elif selection == 2:
-        # Psybeam
-        print('2')
+def kadabra_move():
+    # f = randint(1, 4)
+    # if selection == 1:
+    #     # Confusion
+    #     print('1')
 
-    elif selection == 3:
-        # Reflect
-        print('3')
+    # elif selection == 2:
+    #     # Psybeam
+    #     print('2')
 
-    elif selection == 4:
-        # Recover
-        print('4')
+    # elif selection == 3:
+    #     # Reflect
+    #     print('3')
+
+    # elif selection == 4:
+    #     # Recover
+    #     print('4')
 
     # turn()
+    print('update')
 
 
 
