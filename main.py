@@ -6,6 +6,8 @@ from sys import exit
 
 damage_regulator = 3
 money = randint(435, 1025)
+turn_count = 0
+
 
 class Haunter():
     def __init__(self):
@@ -231,7 +233,8 @@ def item_choice():
                 print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.max_hp}')
                 potion_quantity = 0
                 sleep(4)
-                # Todo: turn success, opponent's turn
+                kadabra_turn()
+                False
             else:
                 sleep(1)
                 print('You have ran out of potions. Please select another choice...')
@@ -247,7 +250,8 @@ def item_choice():
                 print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {start_hp + potion_power}')
                 randopotion_quantity = 0
                 sleep(4)
-                # Todo: turn success, opponent's turn
+                kadabra_turn()
+                return False
             else:
                 sleep(1)
                 print('You have ran out of randopotions. Please select another choice...')
@@ -282,11 +286,75 @@ def run_choice():
     sleep(3)
     turn()
 
+def turn_counter():
+    global turn_count
+    turn_count += 1
+    print(turn_count)
+    sleep(3)
+
+def kady_turn():
+    tester = input('Count or difference?')
+    if tester == 'Count':    
+        print(f'Turn number {turn_count}')
+    elif tester == 'difference':
+        print('update')
+        # Assign a variable to reference the current turn_count value
+        # Another variable to 
+    else:
+        print('Wrong choice - try again')
+        tester()
+
+# Todo first:
+# In kadabra's code, assign a variable to make a reference of the turn_count value when kadabra.confused = True
+# When that variable is equal to another variable which is + 2 of the former's value, confused = False
+# Same logic with Reflect 
+# kady_turn can be deleted as it was a test
+# Also delete from while statement at the end of the code
+
 def kadabra_turn():
     sleep(1)
-    print('Kadabra laughed...')
+    title_banner()
+    print('')
     sleep(3)
-    turn()
+
+    start_turn = 0
+    current_turn = start_turn + 1
+
+    if kadabra.sleep == True:
+        sleep_chance = randint(1, 3)
+        if sleep_chance == 1:
+            print('Kadabra woke up!')
+            sleep(2)
+            kadabra.sleep = False
+        else:
+            print('Kadabra is fast asleep...')
+            sleep(3)
+            turn()
+
+    if kadabra.confused == True:
+        confusion_chance = randint(1, 2)
+
+    selection = randint(1, 4)
+    if selection == 1:
+        # Confusion
+        print('1')
+
+    elif selection == 2:
+        # Psybeam
+        print('2')
+
+    elif selection == 3:
+        # Reflect
+        print('3')
+
+    elif selection == 4:
+        # Recover
+        print('4')
+
+    # turn()
+
+
+
 
 ## GAME ##
 switch = 'on'
@@ -308,7 +376,9 @@ if switch == 'on':
     print('==================================================')
     sleep(2)
 
-    # Turn
     while True:
-        turn()
-        kadabra_turn()
+    #     turn()
+        turn_counter()
+    #    kadabra_turn()
+        kady_turn()
+    # kadabra_turn()
