@@ -111,7 +111,7 @@ def fight_choice():
     print('==================================================')
     sleep(1)
 
-    # Todo: do I need return statements for hp, confusion and sleep status'?
+    # Todo: do I need return statements for hp, confusion and sleep status'? Test
     while True:
         move_selected = input('Type a number to select an option: ')
         title_banner()
@@ -134,7 +134,7 @@ def fight_choice():
                 sleep(2)
                 print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
             sleep(3)
-            kadabra_turn()
+            kadabra_sleep_checker()
             return False
         if move_selected == '2':
             # Shadow Punch
@@ -155,7 +155,7 @@ def fight_choice():
                 sleep(2)
                 print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
             sleep(3)
-            kadabra_turn()
+            kadabra_sleep_checker()
             return False
         if move_selected == '3':
             # Confuse Ray
@@ -167,7 +167,7 @@ def fight_choice():
             else:
                 print('Enemy Kadabra is confused!')
             sleep(3)
-            kadabra_turn()
+            kadabra_sleep_checker()
             return False
         if move_selected == '4':
             # Hypnosis            
@@ -183,7 +183,7 @@ def fight_choice():
             else:
                 print('Haunter\'s Hypnosis missed!')
             sleep(3)
-            kadabra_turn()
+            kadabra_sleep_checker()
             return False
         else:
             sleep(2)
@@ -223,10 +223,10 @@ def item_choice():
                 else:
                     restored_hp = haunter.max_hp - start_hp
                 sleep(1)
-                print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.max_hp}')
+                print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.hp}')
                 sleep(3)
                 potion_quantity = 0
-                kadabra_turn()
+                kadabra_sleep_checker()
                 False
             else:
                 sleep(1)
@@ -239,11 +239,12 @@ def item_choice():
             if randopotion_quantity != 0:
                 start_hp = haunter.hp
                 potion_power = randint(0, haunter.max_hp - haunter.hp)
+                haunter.hp += potion_power
                 sleep(1)
                 print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {start_hp + potion_power}')
                 sleep(3)
                 randopotion_quantity = 0
-                kadabra_turn()
+                kadabra_sleep_checker()
                 return False
             else:
                 sleep(1)
@@ -278,15 +279,7 @@ def run_choice():
     sleep(3)
     turn()
 
-def confusion_turn_counter():
-    if kadabra.sleep == False:
-        if kadabra.confused == True:
-            global confusion_turn_count
-            confusion_turn_count += 1
-        else:
-            confusion_turn_count = 0
-
-def kadabra_turn():
+def kadabra_sleep_checker():
     title_banner()
     print('')
     sleep(1)
@@ -302,7 +295,17 @@ def kadabra_turn():
             print('Kadabra is fast asleep...')
             sleep(3)
             turn()
+            # Todo: Do I need a `return False` line, such as in Haunter's `while` loop? Test it
 
+def kadabra_confusion_turns():
+    if kadabra.sleep == False:
+        if kadabra.confused == True:
+            global confusion_turn_count
+            confusion_turn_count += 1
+        else:
+            confusion_turn_count = 0
+
+def kadabra_confusion_checker():
     if confusion_turn_count == 2:
         kadabra.confused = False
         print('Kadabra snapped out of its confusion!')
@@ -323,56 +326,60 @@ def kadabra_turn():
                 print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
                 sleep(3)
                 turn()
-        else:
-            kadabra_move()
-
-
+        # else:
+        #     kadabra_move()
 
 def kadabra_move():
-    # f = randint(1, 4)
-    # if selection == 1:
-    #     # Confusion
-    #     print('1')
+    kadabra_move_selected = randint(1, 4)
+    if kadabra_move_selected == 1:
+        # Confusion
+        print('1')
 
-    # elif selection == 2:
-    #     # Psybeam
-    #     print('2')
+    elif kadabra_move_selected == 2:
+        # Psybeam
+        print('2')
 
-    # elif selection == 3:
-    #     # Reflect
-    #     print('3')
+    elif kadabra_move_selected == 3:
+        # Reflect
+        # Similar thing as with kadabra_confusion_turns to determine how many turns before the effect wears off?
+        print('3')
 
-    # elif selection == 4:
-    #     # Recover
-    #     print('4')
-
-    # turn()
-    print('update')
-
-
-
+    elif kadabra_move_selected == 4:
+        # Recover
+        sleep(2)
+        print('Kadabra used Recover!')
+        sleep(1)
+        kadabra_start_hp = kadabra.hp
+        kadabra.hp + (0.5 * kadabra.max_hp)
+        if kadabra.hp > kadabra.max_hp:
+            kadabra.hp = kadabra.max_hp
+        restored_hp = kadabra.hp - kadabra_start_hp
+        sleep(1)
+        print(f'Kadabra\'s HP was restored by {restored_hp} points, from {kadabra_start_hp} to {kadabra.hp}')
+        sleep(3)
 
 ## GAME ##
-switch = 'on'
 
-if switch == 'on':
+haunter = Haunter()
+kadabra = Kadabra()
 
-    haunter = Haunter()
-    kadabra = Kadabra()
+# Intro
+title_banner()
+print('')
+print('William wants to battle...')
+sleep(2)
+print('William sent out Kadabra!')
+sleep(2)
+print('Jay sent out Haunter!')
+print('')
+print('==================================================')
+sleep(2)
 
-    # Intro
-    title_banner()
-    print('')
-    print('William wants to battle...')
-    sleep(2)
-    print('William sent out Kadabra!')
-    sleep(2)
-    print('Jay sent out Haunter!')
-    print('')
-    print('==================================================')
-    sleep(2)
-
-    while True:
-    #     turn()
-        confusion_turn_counter()
-        kadabra_turn()
+while True:
+# Todo first: run each function under every conditional pathway to make sure they work
+# Is there an extention which helps, or testing methodology?
+#     turn()
+    kadabra_sleep_checker()
+    kadabra_confusion_turns()
+    kadabra_confusion_checker()
+    kadabra_move()
