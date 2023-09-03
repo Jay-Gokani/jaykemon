@@ -18,7 +18,7 @@ class Haunter():
         self.type2 = "Poison"    
 
         self.max_hp          = 85    
-        self.hp              = 30
+        self.hp              = 85
         self.attack          = 38
         self.defence         = 38
         self.special_attack  = 55
@@ -44,6 +44,7 @@ class Kadabra():
         self.sleep           = False
         self.confused        = False
         self.fainted         = False
+        self.recoil          = True
 
 def title_banner():
     os.system('clear')
@@ -127,7 +128,14 @@ def fight_choice():
         global move_selected
         move_selected = input('Type a number between 1 and 4, or x to select an option: ')
         title_banner()
-        if haunter.disabled == False:
+        if haunter.disabled == True and move_selected == disabled_move:
+            sleep(2)
+            print('')
+            print(f'Haunter\'s {disabled_move} is disabled. Please select another choice...')
+            sleep(4)
+            fight_choice()
+            return False 
+        else:
             if move_selected == '1':
                 # Shadow Ball
                 sleep(2)
@@ -207,13 +215,14 @@ def fight_choice():
                 sleep(4)
                 fight_choice()
                 return False 
-        else:
-            if move_selected == disabled_move:
-                sleep(2)
-                print(f'Haunter\'s {disabled_move} is disabled. Please select another choice...')
-                sleep(4)
-                fight_choice()
-                return False      
+        # else:
+        #     if move_selected == disabled_move:
+        #         sleep(2)
+        #         print('')
+        #         print(f'Haunter\'s {disabled_move} is disabled. Please select another choice...')
+        #         sleep(4)
+        #         fight_choice()
+        #         return False      
 
 def item_choice():
     title_banner()
@@ -321,15 +330,6 @@ def run_choice():
     sleep(3)
     turn()
 
-def disable_turns():
-    if haunter.disabled == True:
-        global disabled_turn_count
-        disabled_turn_count += 1
-        if disabled_turn_count == 2:
-            print(f'Haunter\'s {disabled_move} is no longer disabled!')
-            disabled_turn_count = 0
-            haunter.disabled = False
-
 def kadabra_sleep_checker():
     title_banner()
     print('')
@@ -345,20 +345,14 @@ def kadabra_sleep_checker():
         else:
             print('Kadabra is fast asleep...')
             sleep(3)
-            turn()
-            # Todo: Do I need a `return False` line, such as in Haunter's `while` loop? Test it
 
-def kadabra_confusion_turns():
-    if kadabra.sleep == False:
-        if kadabra.confused == True:
-            global confusion_turn_count
-            confusion_turn_count += 1
-        else:
-            confusion_turn_count = 0
-
-def kadabra_confusion_checker():
+def kadabra_confusion():
+    if kadabra.confused == True:
+        global confusion_turn_count
+        confusion_turn_count += 1
     if confusion_turn_count == 2:
         kadabra.confused = False
+        confusion_turn_count = 0
         print('Kadabra snapped out of its confusion!')
         sleep(3)
     if kadabra.confused == True:
@@ -366,6 +360,7 @@ def kadabra_confusion_checker():
         sleep(3)
         recoil_chance = randint(1, 3)
         if recoil_chance == 1:
+            kadabra.recoil = True
             print('Kadabra hurt itself in it\'s confusion!')
             kadabra.hp -= round(kadabra.max_hp * (randint(20, 30)/100))
             if kadabra.hp <= 0:
@@ -376,9 +371,6 @@ def kadabra_confusion_checker():
                 sleep(2)
                 print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
                 sleep(3)
-                turn()
-        # else:
-        #     kadabra_move()
 
 def kadabra_move():
     kadabra_move_selected = randint(1, 4)
@@ -429,8 +421,18 @@ def kadabra_move():
             print('Kadabra used Disable!')
             sleep(1)
             global disabled_move
+            global disabled_move_name
             disabled_move = move_selected
-            print(f'Haunter\'s {disabled_move} has been disabled...')
+
+            haunter_moves = {
+            '1': 'Shadow Ball',
+            '2': 'Shadow Punch',
+            '3': 'Confuse Ray',
+            '4': 'Hypnosis'
+            }
+
+            disabled_move_name = haunter_moves.get(disabled_move)
+            print(f'Haunter\'s {disabled_move_name} has been disabled!')
             haunter.disabled = True
             sleep(3)
         else:
@@ -453,6 +455,15 @@ def kadabra_move():
             print(f'Kadabra\'s HP was restored by {restored_hp} points, from {kadabra_start_hp} to {kadabra.hp}')
             sleep(3)
 
+def disable_turns():
+    if haunter.disabled == True:
+        global disabled_turn_count
+        disabled_turn_count += 1
+        if disabled_turn_count == 3:
+            print(f'Haunter\'s {disabled_move_name} is no longer disabled!')
+            disabled_turn_count = 0
+            haunter.disabled = False
+
 # Game loop
 
 haunter = Haunter()
@@ -464,9 +475,9 @@ if switch == 'on':
     # # Intro
     # title_banner()
     # print('')
-    # print('William wants to battle...')
+    # print('Josh wants to battle...')
     # sleep(2)
-    # print('William sent out Kadabra!')
+    # print('Josh sent out Kadabra!')
     # sleep(2)
     # print('Jay sent out Haunter!')
     # print('')
@@ -474,11 +485,10 @@ if switch == 'on':
     # sleep(2)
 
     while True:
-    # Todo first: run each function under every conditional pathway to make sure they work
-    # Is there an extention which helps, or testing methodology?
-        turn()
+        # turn()
+        kadabra_sleep_checker()
+        # if kadabra.sleep == False:
+            # kadabra_confusion()
+        # if kadabra.recoil == False:
+            # kadabra_move()
         # disable_turns()
-        # kadabra_sleep_checker()
-        # kadabra_confusion_turns()
-        # kadabra_confusion_checker()
-        # kadabra_move()
