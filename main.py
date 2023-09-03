@@ -5,6 +5,8 @@ from random import randint
 from sys import exit
 
 damage_regulator = 3
+potion_quantity = 1
+randopotion_quantity = 1
 money = randint(435, 1025)
 confusion_turn_count = 0
 disabled_turn_count = 0
@@ -16,7 +18,7 @@ class Haunter():
         self.type2 = "Poison"    
 
         self.max_hp          = 85    
-        self.hp              = 10
+        self.hp              = 30
         self.attack          = 38
         self.defence         = 38
         self.special_attack  = 55
@@ -24,6 +26,7 @@ class Haunter():
         self.speed           = 50
 
         self.disabled        = False
+        self.fainted         = False
 
 class Kadabra():
     def __init__(self):
@@ -39,7 +42,8 @@ class Kadabra():
         self.speed           = 55
 
         self.sleep           = False
-        self.confused        = True
+        self.confused        = False
+        self.fainted         = False
 
 def title_banner():
     os.system('clear')
@@ -112,13 +116,16 @@ def fight_choice():
     print('4 Hypnosis')
     sleep(1)
     print('')
+    print('x Return to Fight | Items | Pokemon | Run screen')
+    sleep(1)
+    print('')
     print('==================================================')
     sleep(1)
 
     # Todo: do I need return statements for hp, confusion and sleep status'? Test
     while True:
         global move_selected
-        move_selected = input('Type a number to select an option: ')
+        move_selected = input('Type a number between 1 and 4, or x to select an option: ')
         title_banner()
         if haunter.disabled == False:
             if move_selected == '1':
@@ -132,6 +139,7 @@ def fight_choice():
                 kadabra.hp -= shadow_ball_damage
                 sleep(1)
                 if kadabra.hp <= 0:
+                    kadabra.fainted = True
                     print(f'Kadabra fainted! You win ${money}!')
                     sleep(3)
                     exit()
@@ -140,7 +148,6 @@ def fight_choice():
                     sleep(2)
                     print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
                 sleep(3)
-                kadabra_sleep_checker()
                 return False
             if move_selected == '2':
                 # Shadow Punch
@@ -161,7 +168,6 @@ def fight_choice():
                     sleep(2)
                     print(f'Enemy Kadabra\'s HP is now {kadabra.hp}/{kadabra.max_hp}')
                 sleep(3)
-                kadabra_sleep_checker()
                 return False
             if move_selected == '3':
                 # Confuse Ray
@@ -172,8 +178,8 @@ def fight_choice():
                     print('Kadabra is already confused...')
                 else:
                     print('Enemy Kadabra is confused!')
+                kadabra.confused = True
                 sleep(3)
-                kadabra_sleep_checker()
                 return False
             if move_selected == '4':
                 # Hypnosis            
@@ -182,18 +188,22 @@ def fight_choice():
                 sleep(1)
                 if kadabra.sleep == True:
                     print('Kadabra is already asleep...')
-                sleep_chance = randint(1, 3)
-                if sleep_chance != 1:
-                    kadabra.sleep = True
-                    print('Enemy Kadabra fell asleep!')
                 else:
-                    print('Haunter\'s Hypnosis missed!')
+                    sleep_chance = randint(1, 3)
+                    if sleep_chance != 1:
+                        kadabra.sleep = True
+                        print('Enemy Kadabra fell asleep!')
+                    else:
+                        print('Haunter\'s Hypnosis missed!')
                 sleep(3)
-                kadabra_sleep_checker()
+                return False
+            if move_selected == 'x' or 'X':
+                turn()
                 return False
             else:
+                # Invalid choice
                 sleep(2)
-                print('Please only select a choice between 1 and 4...')
+                print('Please only select a choice between 1 and 4, or x...')
                 sleep(4)
                 fight_choice()
                 return False 
@@ -219,28 +229,37 @@ def item_choice():
     print('3 Pokeball')
     sleep(1)
     print('')
+    print('x Return to Fight | Items | Pokemon | Run screen')
+    sleep(1)
+    print('')
     print('==================================================')
     sleep(1)
 
     while True:
-        item_selected = input('Type a number to select an option: ')
+        item_selected = input('Type a number between 1 and 3, or x to select an option: ')
         if item_selected == '1':
             # Potion
+            global potion_quantity
             if potion_quantity != 0:
-                start_hp = haunter.hp
-                haunter.hp + 20
-                if haunter.hp > haunter.max_hp:
-                    haunter.hp = haunter.max_hp
-                if start_hp < 20:
-                    restored_hp = 20
+                if haunter.hp == haunter.max_hp:
+                    sleep(2)
+                    print('Haunter\'s HP is already at max. Please select another choice...')
+                    sleep(4)
+                    item_choice()
+                    return False 
                 else:
-                    restored_hp = haunter.max_hp - start_hp
-                sleep(1)
-                print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.hp}')
-                sleep(3)
-                potion_quantity = 0
-                kadabra_sleep_checker()
-                False
+                    start_hp = haunter.hp
+                    if haunter.max_hp - haunter.hp <= 20:
+                        restored_hp = haunter.max_hp - haunter.hp
+                        haunter.hp = haunter.max_hp
+                    else:
+                        restored_hp = 20
+                        haunter.hp += 20
+                    sleep(1)
+                    print(f'Haunter\'s HP was restored by {restored_hp} points, from {start_hp} to {haunter.hp}')
+                    sleep(3)
+                    potion_quantity = 0
+                    return False
             else:
                 sleep(1)
                 print('You have ran out of potions. Please select another choice...')
@@ -249,16 +268,23 @@ def item_choice():
                 return False
         elif item_selected == '2':
             # Randopotion
+            global randopotion_quantity 
             if randopotion_quantity != 0:
-                start_hp = haunter.hp
-                potion_power = randint(0, haunter.max_hp - haunter.hp)
-                haunter.hp += potion_power
-                sleep(1)
-                print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {start_hp + potion_power}')
-                sleep(3)
-                randopotion_quantity = 0
-                kadabra_sleep_checker()
-                return False
+                if haunter.hp == haunter.max_hp:
+                    sleep(2)
+                    print('Haunter\'s HP is already at max. Please select another choice...')
+                    sleep(4)
+                    item_choice()
+                    return False
+                else:
+                    start_hp = haunter.hp
+                    potion_power = randint(0, haunter.max_hp - haunter.hp)
+                    haunter.hp += potion_power
+                    sleep(1)
+                    print(f'Haunter\'s HP was restored by {potion_power} points, from {start_hp} to {haunter.hp}')
+                    sleep(3)
+                    randopotion_quantity = 0
+                    return False
             else:
                 sleep(1)
                 print('You have ran out of randopotions. Please select another choice...')
@@ -272,10 +298,13 @@ def item_choice():
             sleep(4)
             item_choice()
             return False
+        if item_selected == 'x' or 'X':
+                turn()
+                return False
         else:
-            # Invalid choice number
+            # Invalid choice
             sleep(1)
-            print('Please only select a choice between 1 and 3...')
+            print('Please only select a choice between 1 and 3, or x...')
             sleep(4)
             item_choice()
             return False
@@ -429,24 +458,27 @@ def kadabra_move():
 haunter = Haunter()
 kadabra = Kadabra()
 
-# Intro
-title_banner()
-print('')
-print('William wants to battle...')
-sleep(2)
-print('William sent out Kadabra!')
-sleep(2)
-print('Jay sent out Haunter!')
-print('')
-print('==================================================')
-sleep(2)
+switch = 'on'
+if switch == 'on':
 
-while True:
-# Todo first: run each function under every conditional pathway to make sure they work
-# Is there an extention which helps, or testing methodology?
-    turn()
-    disable_turns()
-    kadabra_sleep_checker()
-    kadabra_confusion_turns()
-    kadabra_confusion_checker()
-    kadabra_move()
+    # # Intro
+    # title_banner()
+    # print('')
+    # print('William wants to battle...')
+    # sleep(2)
+    # print('William sent out Kadabra!')
+    # sleep(2)
+    # print('Jay sent out Haunter!')
+    # print('')
+    # print('==================================================')
+    # sleep(2)
+
+    while True:
+    # Todo first: run each function under every conditional pathway to make sure they work
+    # Is there an extention which helps, or testing methodology?
+        turn()
+        # disable_turns()
+        # kadabra_sleep_checker()
+        # kadabra_confusion_turns()
+        # kadabra_confusion_checker()
+        # kadabra_move()
