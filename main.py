@@ -44,13 +44,18 @@ class Kadabra():
         self.sleep           = False
         self.confused        = False
         self.fainted         = False
-        self.recoil          = True
+        self.recoil          = False
 
 def title_banner():
     os.system('clear')
     print('==================================================')
     print(figlet_format("Jaykemon"))
     print('==================================================')
+
+def randomiser():
+    global randomise
+    randomise = randint(1,3)
+    return randomise
 
 def turn():
     title_banner()
@@ -100,7 +105,7 @@ def turn():
             return False
         else:
             sleep(1)
-            print('Please only select a choice between 1 and 4...')
+            print('Only select a choice between 1 and 4...')
             sleep(3)
             turn()
 
@@ -131,7 +136,7 @@ def fight_choice():
         if haunter.disabled == True and move_selected == disabled_move:
             sleep(2)
             print('')
-            print(f'Haunter\'s {disabled_move} is disabled. Please select another choice...')
+            print(f'Haunter\'s {disabled_move} is disabled. Select another choice...')
             sleep(4)
             fight_choice()
             return False 
@@ -139,6 +144,7 @@ def fight_choice():
             if move_selected == '1':
                 # Shadow Ball
                 sleep(2)
+                print('')
                 print('Haunter used Shadow Ball!')
                 sleep(1)
                 print('It\'s super effective!')
@@ -160,6 +166,7 @@ def fight_choice():
             if move_selected == '2':
                 # Shadow Punch
                 sleep(2)
+                print('')
                 print('Haunter used Shadow Punch!')
                 sleep(1)
                 print('It\'s super effective!')
@@ -180,6 +187,7 @@ def fight_choice():
             if move_selected == '3':
                 # Confuse Ray
                 sleep(2)
+                print('')
                 print('Haunter used Confuse Ray!')
                 sleep(1)
                 if kadabra.confused == True:
@@ -192,12 +200,13 @@ def fight_choice():
             if move_selected == '4':
                 # Hypnosis            
                 sleep(2)
+                print('')
                 print('Haunter used Hypnosis!')
                 sleep(1)
                 if kadabra.sleep == True:
                     print('Kadabra is already asleep...')
                 else:
-                    sleep_chance = randint(1, 3)
+                    sleep_chance = randomise
                     if sleep_chance != 1:
                         kadabra.sleep = True
                         print('Enemy Kadabra fell asleep!')
@@ -211,7 +220,7 @@ def fight_choice():
             else:
                 # Invalid choice
                 sleep(2)
-                print('Please only select a choice between 1 and 4, or x...')
+                print('Only select a choice between 1 and 4, or x...')
                 sleep(4)
                 fight_choice()
                 return False 
@@ -219,7 +228,7 @@ def fight_choice():
         #     if move_selected == disabled_move:
         #         sleep(2)
         #         print('')
-        #         print(f'Haunter\'s {disabled_move} is disabled. Please select another choice...')
+        #         print(f'Haunter\'s {disabled_move} is disabled. Select another choice...')
         #         sleep(4)
         #         fight_choice()
         #         return False      
@@ -252,7 +261,7 @@ def item_choice():
             if potion_quantity != 0:
                 if haunter.hp == haunter.max_hp:
                     sleep(2)
-                    print('Haunter\'s HP is already at max. Please select another choice...')
+                    print('Haunter\'s HP is already at max. Select another choice...')
                     sleep(4)
                     item_choice()
                     return False 
@@ -271,7 +280,7 @@ def item_choice():
                     return False
             else:
                 sleep(1)
-                print('You have ran out of potions. Please select another choice...')
+                print('You have ran out of potions. Select another choice...')
                 sleep(4)
                 item_choice()
                 return False
@@ -281,7 +290,7 @@ def item_choice():
             if randopotion_quantity != 0:
                 if haunter.hp == haunter.max_hp:
                     sleep(2)
-                    print('Haunter\'s HP is already at max. Please select another choice...')
+                    print('Haunter\'s HP is already at max. Select another choice...')
                     sleep(4)
                     item_choice()
                     return False
@@ -296,7 +305,7 @@ def item_choice():
                     return False
             else:
                 sleep(1)
-                print('You have ran out of randopotions. Please select another choice...')
+                print('You have ran out of randopotions. Select another choice...')
                 sleep(4)
                 item_choice()
                 return False
@@ -313,7 +322,7 @@ def item_choice():
         else:
             # Invalid choice
             sleep(1)
-            print('Please only select a choice between 1 and 3, or x...')
+            print('Only select a choice between 1 and 3, or x...')
             sleep(4)
             item_choice()
             return False
@@ -326,7 +335,7 @@ def pokemon_choice():
 
 def run_choice():
     sleep(1)
-    print('You can not run from a trainer battle! Select another choice...')
+    print('You can\'t run from a trainer battle! Select another choice...')
     sleep(3)
     turn()
 
@@ -337,7 +346,7 @@ def kadabra_sleep_checker():
     print('Enemy Kadabra\'s turn...')
 
     if kadabra.sleep == True:
-        sleep_chance = randint(1, 3)
+        sleep_chance = randomise
         if sleep_chance == 1:
             print('Kadabra woke up!')
             sleep(2)
@@ -350,7 +359,7 @@ def kadabra_confusion():
     if kadabra.confused == True:
         global confusion_turn_count
         confusion_turn_count += 1
-    if confusion_turn_count == 2:
+    if confusion_turn_count == 3:
         kadabra.confused = False
         confusion_turn_count = 0
         print('Kadabra snapped out of its confusion!')
@@ -358,7 +367,7 @@ def kadabra_confusion():
     if kadabra.confused == True:
         print('Kadabra is confused...')
         sleep(3)
-        recoil_chance = randint(1, 3)
+        recoil_chance = randomise
         if recoil_chance == 1:
             kadabra.recoil = True
             print('Kadabra hurt itself in it\'s confusion!')
@@ -377,6 +386,7 @@ def kadabra_move():
     if kadabra_move_selected == 1:
         # Confusion
         sleep(2)
+        print('')
         print('Kadabra used Confusion!')
         sleep(1)
         print('It\'s super effective!')
@@ -397,6 +407,7 @@ def kadabra_move():
     elif kadabra_move_selected == 2:
         # Psybeam
         sleep(2)
+        print('')
         print('Kadabra used Psybeam!')
         sleep(1)
         print('It\'s super effective!')
@@ -418,6 +429,7 @@ def kadabra_move():
         # Disable
         if haunter.disabled == False:
             sleep(2)
+            print('')
             print('Kadabra used Disable!')
             sleep(1)
             global disabled_move
@@ -444,10 +456,11 @@ def kadabra_move():
             kadabra_move()
         else:
             sleep(2)
+            print('')
             print('Kadabra used Recover!')
             sleep(1)
             kadabra_start_hp = kadabra.hp
-            kadabra.hp + (0.5 * kadabra.max_hp)
+            kadabra.hp += (0.5 * kadabra.max_hp)
             if kadabra.hp > kadabra.max_hp:
                 kadabra.hp = kadabra.max_hp
             restored_hp = kadabra.hp - kadabra_start_hp
@@ -460,6 +473,7 @@ def disable_turns():
         global disabled_turn_count
         disabled_turn_count += 1
         if disabled_turn_count == 3:
+            print('')
             print(f'Haunter\'s {disabled_move_name} is no longer disabled!')
             disabled_turn_count = 0
             haunter.disabled = False
@@ -472,23 +486,26 @@ kadabra = Kadabra()
 switch = 'on'
 if switch == 'on':
 
-    # # Intro
-    # title_banner()
-    # print('')
-    # print('Josh wants to battle...')
-    # sleep(2)
-    # print('Josh sent out Kadabra!')
-    # sleep(2)
-    # print('Jay sent out Haunter!')
-    # print('')
-    # print('==================================================')
-    # sleep(2)
+    # Intro
+    title_banner()
+    print('')
+    print('Josh wants to battle...')
+    sleep(2)
+    print('Josh sent out Kadabra!')
+    sleep(2)
+    print('Jay sent out Haunter!')
+    print('')
+    print('==================================================')
+    sleep(2)
 
     while True:
-        # turn()
+        randomiser()
+        turn()
+        randomiser()
         kadabra_sleep_checker()
-        # if kadabra.sleep == False:
-            # kadabra_confusion()
-        # if kadabra.recoil == False:
-            # kadabra_move()
-        # disable_turns()
+        if kadabra.sleep == False:
+            randomiser()
+            kadabra_confusion()
+            if kadabra.recoil == False:
+                kadabra_move()
+        disable_turns()
