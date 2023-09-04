@@ -515,3 +515,6 @@ while True:
             pass
         else: kadabra_move()
     disable_turns()
+
+if __name__ == '__main__':
+	main()
