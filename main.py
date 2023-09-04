@@ -131,7 +131,8 @@ def fight_choice():
     # Todo: do I need return statements for hp, confusion and sleep status'? Test
     while True:
         global move_selected
-        move_selected = input('Type a number between 1 and 4, or x to select an option: ')
+        move_selected = input('Type a number between 1 and 4, or type x: ')
+        # move_selected = input('Type a number between 1 and 4, or x to select an option: ')
         title_banner()
         if haunter.disabled == True and move_selected == disabled_move:
             sleep(2)
@@ -223,15 +224,7 @@ def fight_choice():
                 print('Only select a choice between 1 and 4, or x...')
                 sleep(4)
                 fight_choice()
-                return False 
-        # else:
-        #     if move_selected == disabled_move:
-        #         sleep(2)
-        #         print('')
-        #         print(f'Haunter\'s {disabled_move} is disabled. Select another choice...')
-        #         sleep(4)
-        #         fight_choice()
-        #         return False      
+                return False     
 
 def item_choice():
     title_banner()
@@ -344,6 +337,7 @@ def kadabra_sleep_checker():
     print('')
     sleep(1)
     print('Enemy Kadabra\'s turn...')
+    sleep(1)
 
     if kadabra.sleep == True:
         sleep_chance = randomise
@@ -352,10 +346,12 @@ def kadabra_sleep_checker():
             sleep(2)
             kadabra.sleep = False
         else:
+            sleep(1)
             print('Kadabra is fast asleep...')
             sleep(3)
 
 def kadabra_confusion():
+    kadabra.recoil = False
     if kadabra.confused == True:
         global confusion_turn_count
         confusion_turn_count += 1
@@ -366,7 +362,7 @@ def kadabra_confusion():
         sleep(3)
     if kadabra.confused == True:
         print('Kadabra is confused...')
-        sleep(3)
+        sleep(2)
         recoil_chance = randomise
         if recoil_chance == 1:
             kadabra.recoil = True
@@ -460,7 +456,7 @@ def kadabra_move():
             print('Kadabra used Recover!')
             sleep(1)
             kadabra_start_hp = kadabra.hp
-            kadabra.hp += (0.5 * kadabra.max_hp)
+            kadabra.hp += round((0.5 * kadabra.max_hp))
             if kadabra.hp > kadabra.max_hp:
                 kadabra.hp = kadabra.max_hp
             restored_hp = kadabra.hp - kadabra_start_hp
@@ -475,37 +471,37 @@ def disable_turns():
         if disabled_turn_count == 3:
             print('')
             print(f'Haunter\'s {disabled_move_name} is no longer disabled!')
+            sleep(3)
             disabled_turn_count = 0
             haunter.disabled = False
 
-# Game loop
+# =====================================================
+# ================= Game loop =========================
+# =====================================================
 
 haunter = Haunter()
 kadabra = Kadabra()
 
-switch = 'on'
-if switch == 'on':
+title_banner()
+print('')
+print('Josh wants to battle...')
+sleep(2)
+print('Josh sent out Kadabra!')
+sleep(2)
+print('Jay sent out Haunter!')
+print('')
+print('==================================================')
+sleep(2)
 
-    # Intro
-    title_banner()
-    print('')
-    print('Josh wants to battle...')
-    sleep(2)
-    print('Josh sent out Kadabra!')
-    sleep(2)
-    print('Jay sent out Haunter!')
-    print('')
-    print('==================================================')
-    sleep(2)
-
-    while True:
+while True:
+    randomiser()
+    turn()
+    randomiser()
+    kadabra_sleep_checker()
+    if kadabra.sleep == False:
         randomiser()
-        turn()
-        randomiser()
-        kadabra_sleep_checker()
-        if kadabra.sleep == False:
-            randomiser()
-            kadabra_confusion()
-            if kadabra.recoil == False:
-                kadabra_move()
-        disable_turns()
+        kadabra_confusion()
+        if kadabra.recoil == True:
+            pass
+        else: kadabra_move()
+    disable_turns()
