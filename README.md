@@ -1,4 +1,4 @@
-# A Simple CLI-based Pokemon Battle Simulator
+# Haunter vs Kadabra: a Pokemon Battle Simulator
 
 This game was inspired by Episode 24 of Pokemon, appropriately named 'Haunter vs Kadabra'!
 
