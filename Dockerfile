@@ -11,5 +11,8 @@ COPY . .
 
 CMD ["python3", "main.py"]
 
-# docker build -t jaykemon_v1 .
-# docker run -it jaykemon_v1
+# docker build -t <image_name> .
+# docker run -it <image_name>
+# docker login -u <username>
+# docker tag <image_name> <username>/<repo>:[tag]
+# docker push <username>/<repo>:[tag]
